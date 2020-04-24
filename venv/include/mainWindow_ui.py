@@ -72,15 +72,30 @@ class Ui_mainWindow(object):
 
         self.pushButtonFiles.clicked.connect(lambda: self.openFileNameDialog(mainWindow))
 
+        self.radioButtonMouse.toggled.connect(lambda: self.onClickedMouse(mainWindow))
+        self.radioButtonPoints.toggled.connect(lambda: self.onClickedPoints(mainWindow))
+
+    def onClickedMouse(self, mainWindow):
+        print("Mouse")
+        self.radioButtonPoints.setDisabled(1)
+        self.labelX.setDisabled(1)
+        self.labelY.setDisabled(1)
+        self.labelZ.setDisabled(1)
+        self.textEditX.setDisabled(1)
+        self.textEditY.setDisabled(1)
+        self.textEditZ.setDisabled(1)
+
+    def onClickedPoints(self, mainWindow):
+        print("Points")
+        self.radioButtonMouse.setDisabled(1)
+
+
 
 
     def openFileNameDialog(self, mainWindow):
         options = QFileDialog.Options()
         options |= QFileDialog.DontUseNativeDialog
         fileName, _ = QFileDialog.getOpenFileName(None, "QFileDialog.getOpenFileName()", "","All Files (*);;Python Files (*.py)", options=options)
-
-        if (fileName):
-            print(fileName)
 
         self.textEditImage.setText(QtCore.QCoreApplication.translate("mainWindow", fileName))
 

@@ -37,8 +37,8 @@ class Ui_StartWindow(object):
         self.pushButtonExit.clicked.connect(StartWindow.close)
         QtCore.QMetaObject.connectSlotsByName(StartWindow)
 
-        self.pushButtonAbout.clicked.connect(self.checkButtonClickedAbout)
-        self.pushButtonStart.clicked.connect(self.checkButtonClickedStart)
+        self.pushButtonAbout.clicked.connect(lambda: self.checkButtonClickedAbout(StartWindow))
+        self.pushButtonStart.clicked.connect(lambda: self.checkButtonClickedStart(StartWindow))
 
     def retranslateUi(self, StartWindow):
         _translate = QtCore.QCoreApplication.translate
@@ -48,16 +48,20 @@ class Ui_StartWindow(object):
         self.pushButtonStart.setText(_translate("StartWindow", "Start"))
         self.labelSegmentation.setText(_translate("StartWindow", "Segmentation"))
 
-    def checkButtonClickedAbout(self):  # otwiera okno z informacjami // docelowo chciałbym zamykac stare okno
+    def checkButtonClickedAbout(self, StartWindow):  # otwiera okno z informacjami // docelowo chciałbym zamykac stare okno
             print("info")
 
+            StartWindow.hide()
             self.aboutWindow = AboutWindow()
             self.aboutWindow.show()
 
+            if self.aboutWindow.isVisible() == 1:
+                StartWindow.show()
 
-    def checkButtonClickedStart(self):
+    def checkButtonClickedStart(self, StartWindow):
             print("start")
 
+            StartWindow.hide()
             self.mainWindow = MainWindow()
             self.mainWindow.show()
 
