@@ -6,6 +6,12 @@
 #
 # WARNING! All changes made in this file will be lost!
 
+#do segmentacji
+import cv2 as cv
+import matplotlib.pyplot as plt
+from scipy import ndimage as ndi
+import skimage.morphology as mor
+#
 import os
 import platform
 import subprocess
@@ -75,6 +81,16 @@ class Ui_mainWindow(object):
         self.radioButtonMouse.toggled.connect(lambda: self.onClickedMouse(mainWindow))
         self.radioButtonPoints.toggled.connect(lambda: self.onClickedPoints(mainWindow))
 
+        self.pushButtonAccept.clicked.connect(lambda: self.onClickedAccept(mainWindow))
+
+    def onClickedAccept(self, mainWindow):
+        mainWindow.close()
+        #zeby brało z pliku
+        filename = '/home/krystian/Pulpit/ImagesPAMM/brain_tumor.bmp'
+
+        self.brain(filename)
+
+
     def onClickedMouse(self, mainWindow):
         print("Mouse")
         self.radioButtonPoints.setDisabled(1)
@@ -88,9 +104,6 @@ class Ui_mainWindow(object):
     def onClickedPoints(self, mainWindow):
         print("Points")
         self.radioButtonMouse.setDisabled(1)
-
-
-
 
     def openFileNameDialog(self, mainWindow):
         options = QFileDialog.Options()
@@ -112,3 +125,21 @@ class Ui_mainWindow(object):
         self.radioButtonPoints.setText(_translate("mainWindow", "points:"))
         self.pushButtonAccept.setText(_translate("mainWindow", "Accept"))
         self.pushButtonClose.setText(_translate("mainWindow", "Close"))
+
+    def brain(self, name):
+        picture = cv.imread(name,0)
+        ret, thresh_binary = cv.threshold( picture, 225, 255,
+        cv.THRESH_BINARY)
+        thresh_binary = ndi.binary_fill_holes(thresh_binary)
+        thresh_binary = mor.remove_small_objects(thresh_binary, min_size=64, connectivity=2)
+
+        titles = ['Bez progowania', 'Globalne z progowa']
+        images = [picture, thresh_binary]
+
+        for i in range(len(images)):
+            plt.subplot(1, 2, i + 1), plt.imshow(images[i], 'gray')
+            plt.title(titles[i])
+            plt.xticks([]), plt.yticks([])
+
+        plt.show()
+

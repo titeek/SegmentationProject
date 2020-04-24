@@ -51,17 +51,17 @@ class Ui_StartWindow(object):
     def checkButtonClickedAbout(self, StartWindow):  # otwiera okno z informacjami // docelowo chciałbym zamykac stare okno
             print("info")
 
-            StartWindow.hide()
+            #StartWindow.hide()
             self.aboutWindow = AboutWindow()
             self.aboutWindow.show()
 
-            if self.aboutWindow.isVisible() == 1:
-                StartWindow.show()
+            #if self.aboutWindow.isVisible() == 1:
+                #StartWindow.show()
 
     def checkButtonClickedStart(self, StartWindow):
             print("start")
 
-            StartWindow.hide()
+            #StartWindow.hide()
             self.mainWindow = MainWindow()
             self.mainWindow.show()
 
@@ -76,3 +76,4 @@ class MainWindow(QtWidgets.QWidget):
         QtWidgets.QWidget.__init__(self, parent)
         self.ui = Ui_mainWindow()
         self.ui.setupUi(self)
+
