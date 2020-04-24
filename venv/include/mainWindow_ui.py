@@ -6,9 +6,12 @@
 #
 # WARNING! All changes made in this file will be lost!
 
+import os
+import platform
+import subprocess
+import sys
 
 from PyQt5 import QtCore, QtGui, QtWidgets
-
 
 class Ui_mainWindow(object):
     def setupUi(self, mainWindow):
@@ -63,6 +66,19 @@ class Ui_mainWindow(object):
         self.retranslateUi(mainWindow)
         self.pushButtonClose.clicked.connect(mainWindow.close)
         QtCore.QMetaObject.connectSlotsByName(mainWindow)
+
+        self.pushButtonFiles.clicked.connect(self.on_click)
+
+    @staticmethod
+    def on_click(self):
+        path = '/home/krystian/Pulpit/ImagesPAMM'
+
+        if platform.system() == "Windows":
+            os.startfile(path)
+        elif platform.system() == "Darwin":
+            subprocess.Popen(["open", path])
+        else:
+            subprocess.Popen(["xdg-open", path])
 
     def retranslateUi(self, mainWindow):
         _translate = QtCore.QCoreApplication.translate
