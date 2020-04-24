@@ -12,6 +12,8 @@ import subprocess
 import sys
 
 from PyQt5 import QtCore, QtGui, QtWidgets
+from PyQt5.QtWidgets import QApplication, QWidget, QInputDialog, QLineEdit, QFileDialog
+from PyQt5.QtGui import QIcon
 
 class Ui_mainWindow(object):
     def setupUi(self, mainWindow):
@@ -67,18 +69,15 @@ class Ui_mainWindow(object):
         self.pushButtonClose.clicked.connect(mainWindow.close)
         QtCore.QMetaObject.connectSlotsByName(mainWindow)
 
-        self.pushButtonFiles.clicked.connect(self.on_click)
+        self.pushButtonFiles.clicked.connect(self.openFileNameDialog)
 
     @staticmethod
-    def on_click(self):
-        path = '/home/krystian/Pulpit/ImagesPAMM'
-
-        if platform.system() == "Windows":
-            os.startfile(path)
-        elif platform.system() == "Darwin":
-            subprocess.Popen(["open", path])
-        else:
-            subprocess.Popen(["xdg-open", path])
+    def openFileNameDialog(self):
+        options = QFileDialog.Options()
+        options |= QFileDialog.DontUseNativeDialog
+        fileName, _ = QFileDialog.getOpenFileName(None, "QFileDialog.getOpenFileName()", "","All Files (*);;Python Files (*.py)", options=options)
+        if fileName:
+            print(fileName)
 
     def retranslateUi(self, mainWindow):
         _translate = QtCore.QCoreApplication.translate
