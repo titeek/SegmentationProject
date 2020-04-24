@@ -69,15 +69,20 @@ class Ui_mainWindow(object):
         self.pushButtonClose.clicked.connect(mainWindow.close)
         QtCore.QMetaObject.connectSlotsByName(mainWindow)
 
-        self.pushButtonFiles.clicked.connect(self.openFileNameDialog)
 
-    @staticmethod
-    def openFileNameDialog(self):
+        self.pushButtonFiles.clicked.connect(lambda: self.openFileNameDialog(mainWindow))
+
+
+
+    def openFileNameDialog(self, mainWindow):
         options = QFileDialog.Options()
         options |= QFileDialog.DontUseNativeDialog
         fileName, _ = QFileDialog.getOpenFileName(None, "QFileDialog.getOpenFileName()", "","All Files (*);;Python Files (*.py)", options=options)
-        if fileName:
+
+        if (fileName):
             print(fileName)
+
+        self.textEditImage.setText(QtCore.QCoreApplication.translate("mainWindow", fileName))
 
     def retranslateUi(self, mainWindow):
         _translate = QtCore.QCoreApplication.translate
