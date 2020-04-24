@@ -16,6 +16,7 @@ import os
 import platform
 import subprocess
 import sys
+import string
 
 from PyQt5 import QtCore, QtGui, QtWidgets
 from PyQt5.QtWidgets import QApplication, QWidget, QInputDialog, QLineEdit, QFileDialog
@@ -85,7 +86,12 @@ class Ui_mainWindow(object):
 
     def onClickedAccept(self, mainWindow):
         mainWindow.close()
-        #filename = '/home/krystian/Pulpit/ImagesPAMM/brain_tumor.bmp'
+        x = self.textEditX.toPlainText()
+        y = self.textEditY.toPlainText()
+        z = self.textEditZ.toPlainText()
+
+        #obróbka danych wejściowych
+
         filename = self.textEditImage.toPlainText()
         self.segmentationProg(filename)
 
@@ -105,11 +111,14 @@ class Ui_mainWindow(object):
         self.radioButtonMouse.setDisabled(1)
 
     def openFileNameDialog(self, mainWindow):
+        defaultPath = ""
+        path = "/home/krystian/Pulpit/ImagesPAMM"
         options = QFileDialog.Options()
         options |= QFileDialog.DontUseNativeDialog
-        fileName, _ = QFileDialog.getOpenFileName(None, "QFileDialog.getOpenFileName()", "","All Files (*);;Python Files (*.py)", options=options)
+        fileName, _ = QFileDialog.getOpenFileName(None, "Load image", path,"Bitmap (*.bmp);; PNG (*.png)", options=options)
 
         self.textEditImage.setText(QtCore.QCoreApplication.translate("mainWindow", fileName))
+        #self.textEditImage.setDisabled(1)
 
     def retranslateUi(self, mainWindow):
         _translate = QtCore.QCoreApplication.translate
@@ -126,9 +135,8 @@ class Ui_mainWindow(object):
         self.pushButtonClose.setText(_translate("mainWindow", "Close"))
 
     def segmentationProg(self, name):
-        picture = cv.imread(name,0)
-        ret, thresh_binary = cv.threshold( picture, 225, 255,
-        cv.THRESH_BINARY)
+        picture = cv.imread(name, 0)
+        ret, thresh_binary = cv.threshold( picture, 200, 255, cv.THRESH_BINARY)
         thresh_binary = ndi.binary_fill_holes(thresh_binary)
         thresh_binary = mor.remove_small_objects(thresh_binary, min_size=64, connectivity=2)
 
