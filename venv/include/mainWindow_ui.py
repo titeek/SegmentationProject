@@ -70,7 +70,7 @@ class Ui_mainWindow(object):
         QtCore.QMetaObject.connectSlotsByName(mainWindow)
 
         self.pushButtonFiles.clicked.connect(self.openFileNameDialog)
-
+#sdas
     @staticmethod
     def openFileNameDialog(self):
         options = QFileDialog.Options()
