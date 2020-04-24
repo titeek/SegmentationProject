@@ -85,10 +85,9 @@ class Ui_mainWindow(object):
 
     def onClickedAccept(self, mainWindow):
         mainWindow.close()
-        #zeby brało z pliku
-        filename = '/home/krystian/Pulpit/ImagesPAMM/brain_tumor.bmp'
-
-        self.brain(filename)
+        #filename = '/home/krystian/Pulpit/ImagesPAMM/brain_tumor.bmp'
+        filename = self.textEditImage.toPlainText()
+        self.segmentationProg(filename)
 
 
     def onClickedMouse(self, mainWindow):
@@ -126,7 +125,7 @@ class Ui_mainWindow(object):
         self.pushButtonAccept.setText(_translate("mainWindow", "Accept"))
         self.pushButtonClose.setText(_translate("mainWindow", "Close"))
 
-    def brain(self, name):
+    def segmentationProg(self, name):
         picture = cv.imread(name,0)
         ret, thresh_binary = cv.threshold( picture, 225, 255,
         cv.THRESH_BINARY)
@@ -137,9 +136,10 @@ class Ui_mainWindow(object):
         images = [picture, thresh_binary]
 
         for i in range(len(images)):
-            plt.subplot(1, 2, i + 1), plt.imshow(images[i], 'gray')
+            plt.subplot(1, 2, i + 1)
+            plt.imshow(images[i], 'gray')
             plt.title(titles[i])
-            plt.xticks([]), plt.yticks([])
+            #plt.xticks([]), plt.yticks([]) # wspolrzedne
 
         plt.show()
 
