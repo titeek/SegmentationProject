@@ -6,8 +6,9 @@
 #
 # WARNING! All changes made in this file will be lost!
 
-#do segmentacji
-import cv2 as cv
+# do segmentacji
+import cv2
+import numpy as np
 import matplotlib.pyplot as plt
 from scipy import ndimage as ndi
 import skimage.morphology as mor
@@ -17,12 +18,17 @@ import platform
 import subprocess
 import sys
 import string
+import regionGrowingSegmentation
 
 from PyQt5 import QtCore, QtGui, QtWidgets
 from PyQt5.QtWidgets import QApplication, QWidget, QInputDialog, QLineEdit, QFileDialog
 from PyQt5.QtGui import QIcon
 
+use = 0
+
+
 class Ui_mainWindow(object):
+
     def setupUi(self, mainWindow):
         mainWindow.setObjectName("mainWindow")
         mainWindow.resize(300, 400)
@@ -76,7 +82,6 @@ class Ui_mainWindow(object):
         self.pushButtonClose.clicked.connect(mainWindow.close)
         QtCore.QMetaObject.connectSlotsByName(mainWindow)
 
-
         self.pushButtonFiles.clicked.connect(lambda: self.openFileNameDialog(mainWindow))
 
         self.radioButtonMouse.toggled.connect(lambda: self.onClickedMouse(mainWindow))
@@ -90,14 +95,23 @@ class Ui_mainWindow(object):
         y = self.textEditY.toPlainText()
         z = self.textEditZ.toPlainText()
 
-        #obróbka danych wejściowych
-
         filename = self.textEditImage.toPlainText()
-        self.segmentationProg(filename)
 
+        global use
+        print(use)
+        if use == 1:
+            regionGrowingSegmentation.main(filename, 0, 0, use)
+
+        if use == 2:
+            convertedX = int(x)
+            convertedY = int(y)
+            regionGrowingSegmentation.main(filename, convertedX, convertedY, use)
 
     def onClickedMouse(self, mainWindow):
         print("Mouse")
+        global use
+        use = 1
+        print(use)
         self.radioButtonPoints.setDisabled(1)
         self.labelX.setDisabled(1)
         self.labelY.setDisabled(1)
@@ -108,6 +122,9 @@ class Ui_mainWindow(object):
 
     def onClickedPoints(self, mainWindow):
         print("Points")
+        global use
+        use = 2
+        print(use)
         self.radioButtonMouse.setDisabled(1)
 
     def openFileNameDialog(self, mainWindow):
@@ -115,10 +132,10 @@ class Ui_mainWindow(object):
         path = "/home/krystian/Pulpit/ImagesPAMM"
         options = QFileDialog.Options()
         options |= QFileDialog.DontUseNativeDialog
-        fileName, _ = QFileDialog.getOpenFileName(None, "Load image", path,"Bitmap (*.bmp);; PNG (*.png)", options=options)
+        fileName, _ = QFileDialog.getOpenFileName(None, "Load image", path, "Bitmap (*.bmp);; PNG (*.png)",
+                                                  options=options)
 
         self.textEditImage.setText(QtCore.QCoreApplication.translate("mainWindow", fileName))
-        #self.textEditImage.setDisabled(1)
 
     def retranslateUi(self, mainWindow):
         _translate = QtCore.QCoreApplication.translate
@@ -133,21 +150,3 @@ class Ui_mainWindow(object):
         self.radioButtonPoints.setText(_translate("mainWindow", "points:"))
         self.pushButtonAccept.setText(_translate("mainWindow", "Accept"))
         self.pushButtonClose.setText(_translate("mainWindow", "Close"))
-
-    def segmentationProg(self, name):
-        picture = cv.imread(name, 0)
-        ret, thresh_binary = cv.threshold( picture, 200, 255, cv.THRESH_BINARY)
-        thresh_binary = ndi.binary_fill_holes(thresh_binary)
-        thresh_binary = mor.remove_small_objects(thresh_binary, min_size=64, connectivity=2)
-
-        titles = ['Bez progowania', 'Globalne z progowa']
-        images = [picture, thresh_binary]
-
-        for i in range(len(images)):
-            plt.subplot(1, 2, i + 1)
-            plt.imshow(images[i], 'gray')
-            plt.title(titles[i])
-            #plt.xticks([]), plt.yticks([]) # wspolrzedne
-
-        plt.show()
-
