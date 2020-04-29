@@ -107,7 +107,7 @@ class Ui_mainWindow(object):
             convertedY = int(y)
             regionGrowingSegmentation.main(filename, convertedX, convertedY, use)
 
-    def onClickedMouse(self, mainWindow):
+    def onClickedMouse(self,  mainWindow):
         print("Mouse")
         global use
         use = 1

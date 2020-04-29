@@ -9,7 +9,7 @@ def getCoordinates(x, y, shape):
     maximumOfX = shape[1] - 1
     maximumOfY = shape[0] - 1
 
-    # left top
+    # left  top
     coordinatesOfX = min(max(x - 1, 0), maximumOfX)
     coordinatesOfY = min(max(y - 1, 0), maximumOfY)
     outTable.append((coordinatesOfX, coordinatesOfY))
