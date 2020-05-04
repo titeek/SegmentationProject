@@ -132,7 +132,7 @@ class Ui_mainWindow(object):
         path = "/home/krystian/Pulpit/ImagesPAMM"
         options = QFileDialog.Options()
         options |= QFileDialog.DontUseNativeDialog
-        fileName, _ = QFileDialog.getOpenFileName(None, "Load image", path, "Bitmap (*.bmp);; PNG (*.png)",
+        fileName, _ = QFileDialog.getOpenFileName(None, "Load image", path, "Bitmap (*.bmp);; PNG (*.png);; JPG (*.jpg)",
                                                   options=options)
 
         self.textEditImage.setText(QtCore.QCoreApplication.translate("mainWindow", fileName))
