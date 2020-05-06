@@ -64,7 +64,7 @@ def regionGrowing(image, startPoint):
     tempList.append((startPoint[0], startPoint[1]))
     processed = []
     bright = image[startPoint[0], startPoint[1]]
-    difference = 20
+    difference = 256 * 0.07
     print("Base brightness: " + str(bright))
     while len(tempList) > 0:
         pixel = tempList[0]
@@ -86,7 +86,6 @@ def regionGrowing(image, startPoint):
 def main(imageToSeg, x, y, use):
 
     image = cv.imread(imageToSeg, 0)
-    ret, imageAfterInitialSegmentation = cv.threshold(image, 128, 255, cv.THRESH_BINARY) #(zdjęcie, poziom jasności od, do, czego uzywamy)
     cv.namedWindow('Initial segmentation')
 
     if use == 1:
