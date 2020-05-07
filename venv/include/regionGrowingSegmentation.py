@@ -98,7 +98,10 @@ def main(imageToSeg, x, y, use, differenceP):
 
     global difference
     difference = 256 * differenceP * 0.01
-
+    print("Use:")
+    print(use)
+    print("DiffP:")
+    print(differenceP)
     cv.imshow('Initial segmentation', image)
     cv.waitKey()
     startingPoint = tableOfSeeds[-1]

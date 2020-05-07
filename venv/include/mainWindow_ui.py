@@ -99,25 +99,30 @@ class Ui_mainWindow(object):
         z = self.textEditZ.toPlainText()
         proc = self.textEditDifference.toPlainText()
 
+        if not proc.isnumeric():
+            proc = 1
+
         filename = self.textEditImage.toPlainText()
 
         global use
-        print(use)
+
         if use == 1:
             convertedProc = int(proc)
             regionGrowingSegmentation.main(filename, 0, 0, use, convertedProc)
-
-        if use == 2:
+        elif use == 2:
             convertedX = int(x)
             convertedY = int(y)
             convertedProc = int(proc)
             regionGrowingSegmentation.main(filename, convertedX, convertedY, use, convertedProc)
+        else:
+            convertedProc = int(proc)
+            regionGrowingSegmentation.main(filename, 0, 0, 1, convertedProc)
 
     def onClickedMouse(self,  mainWindow):
         print("Mouse")
         global use
         use = 1
-        print(use)
+
         self.radioButtonPoints.setDisabled(1)
         self.labelX.setDisabled(1)
         self.labelY.setDisabled(1)
@@ -130,7 +135,7 @@ class Ui_mainWindow(object):
         print("Points")
         global use
         use = 2
-        print(use)
+
         self.radioButtonMouse.setDisabled(1)
 
     def openFileNameDialog(self, mainWindow):
