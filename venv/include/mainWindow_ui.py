@@ -6,13 +6,6 @@
 #
 # WARNING! All changes made in this file will be lost!
 
-# do segmentacji
-import cv2
-import numpy as np
-import matplotlib.pyplot as plt
-from scipy import ndimage as ndi
-import skimage.morphology as mor
-#
 import os
 import platform
 import subprocess
@@ -44,9 +37,15 @@ class Ui_mainWindow(object):
         self.labelY = QtWidgets.QLabel(mainWindow)
         self.labelY.setGeometry(QtCore.QRect(70, 280, 20, 20))
         self.labelY.setObjectName("labelY")
+        self.labelDifference = QtWidgets.QLabel(mainWindow)
+        self.labelDifference.setGeometry((QtCore.QRect(180, 280, 80, 20)))
+        self.labelDifference.setObjectName("labelDifference")
         self.labelZ = QtWidgets.QLabel(mainWindow)
         self.labelZ.setGeometry(QtCore.QRect(70, 310, 20, 20))
         self.labelZ.setObjectName("labelZ")
+        self.labelProc = QtWidgets.QLabel(mainWindow)
+        self.labelProc.setGeometry(QtCore.QRect(240, 306, 20, 20))
+        self.labelProc.setObjectName("labelZ")
         self.pushButtonFiles = QtWidgets.QPushButton(mainWindow)
         self.pushButtonFiles.setGeometry(QtCore.QRect(245, 80, 30, 30))
         self.pushButtonFiles.setObjectName("pushButtonFiles")
@@ -74,6 +73,10 @@ class Ui_mainWindow(object):
         self.textEditZ.setGeometry(QtCore.QRect(90, 304, 60, 28))
         self.textEditZ.setInputMethodHints(QtCore.Qt.ImhFormattedNumbersOnly)
         self.textEditZ.setObjectName("textEditZ")
+        self.textEditDifference = QtWidgets.QTextEdit(mainWindow)
+        self.textEditDifference.setGeometry(QtCore.QRect(180, 304, 60, 28))
+        self.textEditDifference.setInputMethodHints(QtCore.Qt.ImhFormattedNumbersOnly)
+        self.textEditDifference.setObjectName("textEditDifference")
         self.pushButtonClose = QtWidgets.QPushButton(mainWindow)
         self.pushButtonClose.setGeometry(QtCore.QRect(25, 355, 120, 40))
         self.pushButtonClose.setObjectName("pushButtonClose")
@@ -94,18 +97,21 @@ class Ui_mainWindow(object):
         x = self.textEditX.toPlainText()
         y = self.textEditY.toPlainText()
         z = self.textEditZ.toPlainText()
+        proc = self.textEditDifference.toPlainText()
 
         filename = self.textEditImage.toPlainText()
 
         global use
         print(use)
         if use == 1:
-            regionGrowingSegmentation.main(filename, 0, 0, use)
+            convertedProc = int(proc)
+            regionGrowingSegmentation.main(filename, 0, 0, use, convertedProc)
 
         if use == 2:
             convertedX = int(x)
             convertedY = int(y)
-            regionGrowingSegmentation.main(filename, convertedX, convertedY, use)
+            convertedProc = int(proc)
+            regionGrowingSegmentation.main(filename, convertedX, convertedY, use, convertedProc)
 
     def onClickedMouse(self,  mainWindow):
         print("Mouse")
@@ -143,6 +149,7 @@ class Ui_mainWindow(object):
         self.labelLoadImage.setText(_translate("mainWindow", "Load image:"))
         self.labelChoosen.setText(_translate("mainWindow", "Choose source points:"))
         self.labelX.setText(_translate("mainWindow", "X:"))
+        self.labelDifference.setText(_translate("mainWindow", "Difference:"))
         self.labelY.setText(_translate("mainWindow", "Y:"))
         self.labelZ.setText(_translate("mainWindow", "Z:"))
         self.pushButtonFiles.setText(_translate("mainWindow", "X"))
@@ -150,3 +157,4 @@ class Ui_mainWindow(object):
         self.radioButtonPoints.setText(_translate("mainWindow", "points:"))
         self.pushButtonAccept.setText(_translate("mainWindow", "Accept"))
         self.pushButtonClose.setText(_translate("mainWindow", "Close"))
+        self.labelProc.setText(_translate("mainWindow", "%"))

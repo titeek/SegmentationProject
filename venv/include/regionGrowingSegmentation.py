@@ -1,7 +1,9 @@
 import cv2 as cv
 import numpy as np
 
+
 tableOfSeeds = []
+difference = 0
 
 
 def getCoordinates(x, y, shape):
@@ -59,12 +61,12 @@ def mouseClicked(event, x, y, flags, params):
 
 
 def regionGrowing(image, startPoint):
+    global difference
     tempList = []
     outImage = np.zeros_like(image)
     tempList.append((startPoint[0], startPoint[1]))
     processed = []
     bright = image[startPoint[0], startPoint[1]]
-    difference = 256 * 0.07
     print("Base brightness: " + str(bright))
     while len(tempList) > 0:
         pixel = tempList[0]
@@ -83,7 +85,7 @@ def regionGrowing(image, startPoint):
     return outImage
 
 
-def main(imageToSeg, x, y, use):
+def main(imageToSeg, x, y, use, differenceP):
 
     image = cv.imread(imageToSeg, 0)
     cv.namedWindow('Initial segmentation')
@@ -93,6 +95,9 @@ def main(imageToSeg, x, y, use):
 
     if use == 2:
         tableOfSeeds.append((y, x))
+
+    global difference
+    difference = 256 * differenceP * 0.01
 
     cv.imshow('Initial segmentation', image)
     cv.waitKey()
