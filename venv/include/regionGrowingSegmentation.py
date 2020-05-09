@@ -103,6 +103,7 @@ def main(imageToSeg, x, y, use, differenceP):
     cv.waitKey()
     startingPoint = tableOfSeeds[-1]
     out = regionGrowing(image, startingPoint)
+    cv.imwrite("/home/krystian/Pulpit/ImagesPAMM/edited/out.bmp", out)
     cv.imshow('Region Growing', out)
     cv.waitKey()
     cv.destroyAllWindows()
