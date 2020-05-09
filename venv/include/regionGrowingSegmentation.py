@@ -1,6 +1,8 @@
 import cv2 as cv
 import numpy as np
 import time
+import sys
+from PIL import Image
 
 tableOfSeeds = []
 difference = 0
@@ -87,6 +89,37 @@ def regionGrowing(image, startPoint):
     return outImage
 
 
+def join(img1, img2):
+    img = cv.imread(img1, 0)
+    imgWhite = cv.imread(img2, 0)
+    outImage = np.zeros_like(img)
+
+    for row in range(np.size(img, 0)):
+        for col in range(np.size(img, 1)):
+            if imgWhite[row, col] == 255:
+                outImage[row, col] = 255  # set this color to red
+            else:
+                outImage[row, col] = img[row, col]
+
+    return outImage
+
+
+def resultOfSegInColor():
+    im = Image.open("/home/krystian/Pulpit/ImagesPAMM/edited/outWhite.bmp")
+    im = im.convert("RGBA")
+
+    data = np.array(im)  # "data" is a height x width x 4 numpy array
+    red, green, blue, alpha = data.T  # Temporarily unpack the bands for readability
+
+    white_areas = (red == 255) & (blue == 255) & (green == 255)
+    data[..., :-1][white_areas.T] = (255, 0, 255)  # Transpose back needed
+
+    im2 = Image.fromarray(data)
+    im2.save("/home/krystian/Pulpit/ImagesPAMM/edited/outColor.bmp")
+
+    return im2
+
+
 def main(imageToSeg, x, y, use, differenceP):
     image = cv.imread(imageToSeg, 0)
     cv.namedWindow('Initial segmentation')
@@ -103,7 +136,14 @@ def main(imageToSeg, x, y, use, differenceP):
     cv.waitKey()
     startingPoint = tableOfSeeds[-1]
     out = regionGrowing(image, startingPoint)
-    cv.imwrite("/home/krystian/Pulpit/ImagesPAMM/edited/out.bmp", out)
+    cv.imwrite("/home/krystian/Pulpit/ImagesPAMM/edited/outWhite.bmp", out)
     cv.imshow('Region Growing', out)
+
+    imageInColor = resultOfSegInColor()
+    # imageInColor.show()
+
+    outImageWithSegmentation = join(imageToSeg, "/home/krystian/Pulpit/ImagesPAMM/edited/outWhite.bmp")
+    cv.imshow('Result', outImageWithSegmentation)
+    cv.imwrite("/home/krystian/Pulpit/ImagesPAMM/edited/result.bmp", outImageWithSegmentation)
     cv.waitKey()
     cv.destroyAllWindows()

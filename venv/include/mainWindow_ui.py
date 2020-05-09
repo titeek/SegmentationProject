@@ -100,7 +100,7 @@ class Ui_mainWindow(object):
         proc = self.textEditDifference.toPlainText()
 
         if not proc.isnumeric():
-            proc = 1
+            proc = 7
 
         filename = self.textEditImage.toPlainText()
 
