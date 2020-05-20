@@ -18,6 +18,7 @@ from PyQt5.QtWidgets import QApplication, QWidget, QInputDialog, QLineEdit, QFil
 from PyQt5.QtGui import QIcon
 
 use = 0
+process = 0
 
 
 class Ui_mainWindow(object):
@@ -45,7 +46,7 @@ class Ui_mainWindow(object):
         self.labelZ.setObjectName("labelZ")
         self.labelProc = QtWidgets.QLabel(mainWindow)
         self.labelProc.setGeometry(QtCore.QRect(240, 306, 20, 20))
-        self.labelProc.setObjectName("labelZ")
+        self.labelProc.setObjectName("labelProc")
         self.pushButtonFiles = QtWidgets.QPushButton(mainWindow)
         self.pushButtonFiles.setGeometry(QtCore.QRect(245, 80, 30, 30))
         self.pushButtonFiles.setObjectName("pushButtonFiles")
@@ -58,6 +59,9 @@ class Ui_mainWindow(object):
         self.radioButtonPoints = QtWidgets.QRadioButton(mainWindow)
         self.radioButtonPoints.setGeometry(QtCore.QRect(30, 220, 70, 20))
         self.radioButtonPoints.setObjectName("radioButtonPoints")
+        self.radioButtonProcess = QtWidgets.QRadioButton(mainWindow)
+        self.radioButtonProcess.setGeometry(QtCore.QRect(160, 250, 115, 20))
+        self.radioButtonProcess.setObjectName("radioButtonPoints")
         self.pushButtonAccept = QtWidgets.QPushButton(mainWindow)
         self.pushButtonAccept.setGeometry(QtCore.QRect(155, 355, 120, 40))
         self.pushButtonAccept.setObjectName("pushButtonAccept")
@@ -89,6 +93,7 @@ class Ui_mainWindow(object):
 
         self.radioButtonMouse.toggled.connect(lambda: self.onClickedMouse(mainWindow))
         self.radioButtonPoints.toggled.connect(lambda: self.onClickedPoints(mainWindow))
+        self.radioButtonProcess.toggled.connect(lambda: self.onClickedProcess(mainWindow))
 
         self.pushButtonAccept.clicked.connect(lambda: self.onClickedAccept(mainWindow))
 
@@ -105,18 +110,19 @@ class Ui_mainWindow(object):
         filename = self.textEditImage.toPlainText()
 
         global use
+        global process
 
         if use == 1:
             convertedProc = int(proc)
-            regionGrowingSegmentation.main(filename, 0, 0, use, convertedProc)
+            regionGrowingSegmentation.main(filename, 0, 0, use, convertedProc, process)
         elif use == 2:
             convertedX = int(x)
             convertedY = int(y)
             convertedProc = int(proc)
-            regionGrowingSegmentation.main(filename, convertedX, convertedY, use, convertedProc)
+            regionGrowingSegmentation.main(filename, convertedX, convertedY, use, convertedProc, process)
         else:
             convertedProc = int(proc)
-            regionGrowingSegmentation.main(filename, 0, 0, 1, convertedProc)
+            regionGrowingSegmentation.main(filename, 0, 0, 1, convertedProc, process)
 
     def onClickedMouse(self,  mainWindow):
         print("Mouse")
@@ -135,8 +141,13 @@ class Ui_mainWindow(object):
         print("Points")
         global use
         use = 2
-
         self.radioButtonMouse.setDisabled(1)
+
+    def onClickedProcess(self, mainWindow):
+        print("Process")
+
+        global process
+        process = 1
 
     def openFileNameDialog(self, mainWindow):
         defaultPath = ""
@@ -159,7 +170,9 @@ class Ui_mainWindow(object):
         self.labelZ.setText(_translate("mainWindow", "Z:"))
         self.pushButtonFiles.setText(_translate("mainWindow", "X"))
         self.radioButtonMouse.setText(_translate("mainWindow", "after mouse clicked"))
+        self.radioButtonProcess.setText(_translate("mainWindow", "Show process of segmentation"))
         self.radioButtonPoints.setText(_translate("mainWindow", "points:"))
         self.pushButtonAccept.setText(_translate("mainWindow", "Accept"))
         self.pushButtonClose.setText(_translate("mainWindow", "Close"))
         self.labelProc.setText(_translate("mainWindow", "%"))
+

@@ -7,7 +7,7 @@ from PIL import Image
 tableOfSeeds = []
 difference = 0
 colorOfOutImage = 255
-
+proc = 0
 
 def getCoordinates(x, y, shape, outimg):
     global colorOfOutImage
@@ -79,8 +79,10 @@ def regionGrowing(image, startPoint):
                 # print(image[coord[0], coord[1]])  # show brightness of pixel
 
         tempList.pop(0)
-        # cv.imshow("Progress window", outImage)
-        # cv.waitKey(1)
+
+        if proc == 1:
+            cv.imshow("Progress window", outImage)
+            cv.waitKey(1)
 
     stop = time.time()
     t = stop - start
@@ -120,7 +122,7 @@ def resultOfSegInColor():
     return im2
 
 
-def main(imageToSeg, x, y, use, differenceP):
+def main(imageToSeg, x, y, use, differenceP, process):
     image = cv.imread(imageToSeg, 0)
     cv.namedWindow('Initial segmentation')
 
@@ -131,6 +133,9 @@ def main(imageToSeg, x, y, use, differenceP):
         tableOfSeeds.append((y, x))
 
     global difference
+    global proc
+
+    proc = process
     difference = 256 * differenceP * 0.01
     cv.imshow('Initial segmentation', image)
     cv.waitKey()
