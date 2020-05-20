@@ -61,7 +61,7 @@ class Ui_StartWindow(object):
     def checkButtonClickedStart(self, StartWindow):
             print("start")
 
-            StartWindow.hide()
+            #StartWindow.hide()
             self.mainWindow = MainWindow()
             self.mainWindow.show()
 
